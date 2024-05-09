@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start_game_page</title>
+
+<style>	
+
+        body 
+	{
+            background-color: black;
+            color: white; 
+            position: relative; /* Ensure positioning is relative to the body */
+	    font-family: Fredoka;
+        }
+
+        #wavy-note-image 
+	{
+            position: absolute;
+            top: 291px;
+            right: 0px;
+            width: 900px;
+            height: auto;
+        }
+
+        #note-image 
+	{
+            position: absolute; /* Position the image absolutely within the body */
+            top: 10px; /* Adjust top position */
+            left: 5px; /* Adjust left position */
+            width: 110px; /* Adjust width */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        #logo-image 
+	{
+            position: absolute;
+            top: 75px;
+            left: 140px;
+            width: 1000px;
+            height: auto;
+        }
+
+        #start-button-image 
+	{
+            position: absolute;
+            top: 420px;
+            left: 135px;
+            width: 415px;
+            height: 305px;
+        }
+
+	#sel-diff-image 
+	{
+	    position: absolute;
+            top: 356px;
+            left: 178px;
+            width: 355px;
+            height: 90px;
+	}
+	
+	#back-butt-image 
+	{
+	    position: absolute;
+            top: 359px;
+            left: 128px;
+            width: 80px;
+            height: 90px;
+	}
+
+        .button 
+	{
+            position: absolute;
+            color: white;
+            background-color: #000000;
+            border: none;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button1:hover 
+	{
+            background-color: #61C6F3;
+        }
+
+	#button1:hover 
+	{
+    	    background-color: #EEF5ED; 
+	}
+
+	#button2:hover {
+    	    background-color: #81EC6D; 
+	}
+
+	#button3:hover 
+	{
+  	    background-color: #9148AE; 
+	}
+
+	#button4:hover 
+	{
+    	    background-color: #FF0000; 
+	}
+
+        #button1 
+	{
+            top: 444px;
+            left: 256px;
+            padding: 22px 101px;
+        }
+
+        #button2 
+	{
+            top: 509px;
+            left: 256px;
+            padding: 22px 112px;
+        }
+
+        #button3 
+	{
+            top: 575px;
+            left: 256px;
+            padding: 22px 92px;
+        }
+
+        #button4 
+	{
+            top: 641px;
+            left: 256px;
+            padding: 22px 106px;
+        }
+
+</style>
+
+</head>
+<body>
+    <img id="note-image" src="note2-removebg-preview.png">
+    <img id="logo-image" src="LettOLogo2-removebg-preview.png">
+    <img id="start-button-image" src="Home_Page-removebg-preview.png">
+    <img id="sel-diff-image" src="SelDiff-removebg-preview.png">
+    <img id="back-butt-image" src="BackButt-removebg-preview.png">
+    <img id="wavy-note-image" src="WavyNote-removebg-preview.png">
+
+    <button id="button1" class="button">Practice</button>
+    <button id="button2" class="button">Easy</button>
+    <button id="button3" class="button">Symphony</button>
+    <button id="button4" class="button">Insane</button>
+
+</body>
+</html>
