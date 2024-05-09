@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LETT O SYMPHONY BTCH</title>
+    <style>
+
+        body 
+	{
+            background-color: black;
+            color: white; 
+            position: relative; /* Ensure positioning is relative to the body */
+        }
+        #note-image 
+	{
+            position: absolute; /* Position the image absolutely within the body */
+            top: 10px; /* Adjust top position */
+            left: 5px; /* Adjust left position */
+            width: 110px; /* Adjust width */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        #logo-image 
+	{
+            position: absolute;
+            top: 75px;
+            left: 140px;
+            width: 1000px;
+            height: auto;
+        }
+
+        #start-button-image 
+	{
+            position: absolute;
+            top: 420px;
+            left: 155px;
+            width: 400px;
+            height: 250px;
+        }
+
+        #wavy-note-image 
+	{
+            position: absolute;
+            top: 291px;
+            right: 0px;
+            width: 900px;
+            height: auto;
+        }
+
+        .button 
+	{
+            position: absolute;
+            color: white;
+            background-color: #000000;
+            border: none;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Add smooth transition */
+        }
+
+	#button1:hover 
+	{
+    	    background-color: #FE9677; 
+	}
+
+	#button2:hover {
+    	    background-color: #F64668; 
+	}
+
+	#button3:hover {
+    	    background-color: #6D2449; 
+	}
+
+        #button1 
+	{
+            top: 444px;
+            left: 257px;
+            padding: 22px 95px;
+        }
+
+        #button2 
+	{
+            top: 510px;
+            left: 257px;
+            padding: 22px 120px;
+        }
+
+        #button3 
+	{
+            top: 576px;
+            left: 257px;
+            padding: 22px 111px;
+        }
+ 
+    </style>
+</head>
+<body>
+
+    <img id="note-image" src="note-removebg-preview.png">
+    <img id="logo-image" src="LettOLogo-removebg-preview.png">
+    <img id="start-button-image" src="StartButt-removebg-preview.png">
+    <img id="wavy-note-image" src="WavyNote-removebg-preview.png">
+
+    <button id="button1" class="button">Start Game</button>
+    <button id="button2" class="button">Help</button>
+    <button id="button3" class="button">Credits</button>
+
+</body>
+</html>
