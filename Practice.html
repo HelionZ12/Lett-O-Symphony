@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>Lett O Symphony</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				color: white;
+				background-color: black;
+				overflow: hidden;
+				transform: scale(70%);
+			}
+			video {
+				width: 65%;
+				height: auto;
+			}
+			h1 {
+				margin: 20px 5px;
+			}
+			#custom-controls {
+				position: fixed;
+				top: 20px;
+				left: 100px;
+				transform: translateX(-50%);
+				background: rgba(0, 0, 0, 0.5);
+				border-radius: 5px;
+				color: white;
+			}
+			#custom-controls button,
+			#custom-controls input {
+				margin: 0 5px;
+			}
+#input1 {
+            font-size: 150%;
+            text-align: center;
+            justify-content: center;  
+			font-family: 'Courier New', monospace;
+			
+        }
+        #lyrics-container {
+            text-align: center;
+            justify-content: center;
+            top: 100px;
+            font-size: 160%;
+            width: 100%;
+            color: white;
+        }
+			.correct {
+				color: green;
+			}
+			.incorrect {
+				color: red;
+			}
+
+			/* Styles for the scoreboard */
+			#scoreboard {
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				background: rgba(0, 0, 0, 0.5);
+				border-radius: 5px;
+				padding: 20px;
+				color: white;
+				display: none;
+			}
+
+			/* Stylish start button */
+			#startGame {
+			font-family: Garamond,Baskerville,Baskerville Old Face,Hoefler Text,Times New Roman,serif; 
+				background-color: transparent;
+				border: none;
+				color: white;
+				padding: 100px 10px;
+				margin: 8% 0%;
+				text-decoration: none;
+				display: inline-block;
+				font-size: 100px;
+				cursor: pointer;
+				transition: background-color 0.3s ease;
+			}
+
+			#startGame:hover {
+				color: green;
+			}
+			/* Progress bar styles */
+	#progressBarContainer {
+		width: 65%; /* Same width as video */
+		height: 5px; /* Height of the progress bar */
+		background-color: rgba(255, 255, 255, 0.3);
+			display: none;
+	}
+
+
+
+	#progressBar {
+		height: 100%;
+		width: 0; /* Initially set width to 0 */
+		background-color: #28a745; /* Progress bar color */
+		
+	}
+
+	#seek-bar {
+		 display: none; /* Hide the seek bar */
+	}
+
+	#volume-bar {
+		display: none; /* Hide the volume bar */
+	}
+
+
+	/* Stylish play/pause button */
+#playpause {
+		background-color: silver;
+		border: none;
+		padding: 10px 20px;
+		text-align: center;
+		text-decoration: none;
+		display: inline-block;
+		font-size: 24px;	
+		cursor: pointer;
+		border-radius: 10%; /* Make it round */
+		transition: background-color 0.3s ease;
+		    position: fixed; /* Fixed positioning */
+    bottom: 15px; /* Adjust top position */
+    right: 40px/* Adjust left position */
+	
+}
+
+
+
+	#playpause:hover {
+		background-color: white;
+	}
+	
+	
+	#additional-controls {
+				display: none;
+			}
+
+#overlay-controls button {
+    background-color: green;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+    gap: 10px; /* Add some space between buttons */
+}
+
+	#overlay-controls button:hover {
+		background-color: #218838;
+	}
+
+	@media only screen and (max-width: 600px) {
+		/* CSS styles for mobile devices */
+		body {
+			font-size: 14px;
+			transform: scale(100%);	
+		}
+		/* Adjust other styles as needed */
+	}
+
+
+
+		</style>
+	</head>
+	<body>
+	<center>
+		<!-- Title and Play Button -->
+    <h1>Amazing Grace"</h1>
+		<button id="startGame">Press Start</button>
+		
+		
+			<div id="overlay-controls" style="display: none;">
+        <button id="restartGame">Reset</button>
+        <button id="endButton">End</button>
+        <button id="exitButton">Exit	</button>
+	
+    </div>
+	    <div id="additional-controls">
+        <p>WPS: <span id="wps">0</span>
+       WPM: <span id="wpm">0</span></p>
+    </div>	
+		
+		<!-- Video container and custom controls -->
+		<div class="video-container" id="videoContainer" style="display: none;">
+			<video id="myVideo" src="Assets/grace.mp4"></video>	
+			
+			<div id="lyrics-container"></div>
+			<div id="progressBarContainer">
+				<div id="progressBar"></div>
+			</div>
+			<div id="input1" contenteditable="true">START HERE</div>
+
+
+
+	<div id="custom-controls" style="display: none;">
+    <button id="playpause" style="display: none;">||</button><br>
+    <input type="range" id="seek-bar" value="0"><br>
+    <input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1">
+    
+	</div>
+
+
+
+			</div>
+	</center>
+	<!-- Scoreboard -->
+	<div id="scoreboard" style="display: none;">
+		<h2>Scoreboard</h2>
+		<p>Correct Letters: <span id="correctLetters">0</span></p>
+		<p>Incorrect Letters: <span id="incorrectLetters">0</span></p>
+		<p>Score: <span id="score">0</span></p>
+	</div>
+	<script>
+	const video = document.getElementById("myVideo");
+	const playpause = document.getElementById("playpause");
+	const seekBar = document.getElementById("seek-bar");
+	const mute = document.getElementById("mute");
+	const volumeBar = document.getElementById("volume-bar");
+	const lyricsContainer = document.getElementById("lyrics-container");
+	const inputDiv = document.getElementById("input1");
+	const startButton = document.getElementById("startGame");
+	const videoContainer = document.getElementById("videoContainer");
+	const customControls = document.getElementById("custom-controls");
+	const progressBarContainer = document.getElementById("progressBarContainer");
+	const progressBar = document.getElementById("progressBar");
+	const restartButton = document.getElementById("restartGame");
+	const exitButton = document.getElementById("exitButton");
+	
+	exitButton.addEventListener("click", () => {
+		window.location.href = "index.html"; // Correctly navigate to index.html
+	});
+
+	restartButton.addEventListener("click", () => {
+		// Reset the video to the beginning
+		video.currentTime = 0;
+		// Reset score
+		correctLetters = 0;
+		incorrectLetters = 0;
+		// Update the display of score-related elements
+		correctLettersDisplay.textContent = correctLetters;
+		incorrectLettersDisplay.textContent = incorrectLetters;
+		scoreDisplay.textContent = correctLetters - incorrectLetters;
+		// Hide scoreboard
+		hideScoreboard();
+
+		// Automatically play the video
+		video.play();
+	});
+
+
+	// Function to hide the scoreboard
+	function hideScoreboard() {
+		scoreboard.style.display = "none"; // Hide scoreboard
+	}
+
+
+
+startButton.addEventListener("click", () => {
+    startButton.style.display = "none"; // Hide the start button
+    videoContainer.style.display = "block"; // Show video container
+    customControls.style.display = "block"; // Show custom controls
+
+    // Add countdown logic
+    const countdownDiv = document.createElement("div");
+    countdownDiv.setAttribute("id", "countdown");
+    countdownDiv.style.position = "absolute";
+    countdownDiv.style.top = "50%";
+    countdownDiv.style.left = "50%";
+    countdownDiv.style.transform = "translate(-50%, -50%)";
+    countdownDiv.style.fontSize = "100px";
+    countdownDiv.style.color = "white";
+    document.body.appendChild(countdownDiv);
+
+    let count = 3;
+    const countdownInterval = setInterval(() => {
+        countdownDiv.textContent = count;
+        count--;
+        if (count < 0) {
+            clearInterval(countdownInterval);
+            document.body.removeChild(countdownDiv);
+            // Start the game after countdown
+            video.play();
+            // Show the play/pause button
+            playpause.style.display = "inline-block";
+
+            // Show progress bar and additional controls after countdown
+            progressBarContainer.style.display = "block";
+            document.getElementById("additional-controls").style.display = "block";
+
+            // Focus on the input field when the game starts
+            inputDiv.focus();
+        }
+    }, 1000);
+});
+// Lyrics here
+const lyrics = [
+
+    { time: 53.5, text: "Amazing grace, how sweet the sound", duration: 10},
+    { time: 64, text: "That save a wretch like me", duration: 10},
+    { time: 74.5, text: "I once was lost but now am found", duration: 10},
+    { time: 84.5, text: "Was blind but now I see", duration: 10.5},
+	
+	{ time: 102, text: "Twas grace that taught my heart to fear", duration: 10.5},
+	{ time: 112.5, text: "And grace my fears relieved", duration: 10},
+	{ time: 122.5, text: "How precious did that grace appear", duration: 11},
+	{ time: 133.5, text: "The hour I first believed", duration: 10.5},
+	
+	{ time: 143.5, text: "Through many dangers, toils and snares", duration: 10.5},
+	{ time: 153.5, text: "We have already come", duration: 10},
+	{ time: 163.5, text: "Twas grace hath brought us safe thus far", duration: 11},
+	{ time: 174.5, text: "And grace will lead us home", duration: 10},
+	
+	{ time: 184.5, text: "And grace will lead us home", duration: 10.5},
+	
+	{ time: 202, text: "Amazing grace, how sweet the sound", duration: 10.5},
+	{ time: 212.5, text: "That save a wretch like me", duration: 10},
+	{ time: 223.5, text: "I once was lost but now am found", duration: 11},
+	{ time: 234., text: "Was blind but now I see", duration: 9.5},
+	
+	{ time: 250, text: "Was blind but now I ", duration: 9},
+	{ time: 258.5, text: "I see... ", duration: 7},
+
+    ];
+
+
+	let previousLyric = null;
+	let correctLetters = 0;
+	let incorrectLetters = 0;
+	let currentInput = '';
+
+	function updateLyrics() {
+		const currentTime = video.currentTime;
+		let currentLyric = null;
+		for (let i = 0; i < lyrics.length; i++) {
+			if (currentTime >= lyrics[i].time && currentTime < (lyrics[i].time + lyrics[i].duration)) {
+				currentLyric = lyrics[i];
+				break;
+			}
+		}
+
+		if (currentLyric) {
+			lyricsContainer.textContent = currentLyric.text;
+			if (currentLyric !== previousLyric) {
+				updateScore(); // Update the score when lyrics change
+				inputDiv.textContent = "";
+				currentInput = ''; // Reset the current input
+				previousLyric = currentLyric;
+			}
+			// Show progress bar when lyrics are displayed
+			progressBarContainer.style.display = "block";
+		} else {
+			lyricsContainer.textContent = "";
+			inputDiv.textContent = ""; // Clear typed words when lyrics disappear
+			// Hide progress bar when lyrics are not displayed
+			progressBarContainer.style.display = "none";
+		}
+
+		// Update progress bar width
+		if (previousLyric) {
+			const timeElapsed = currentTime - previousLyric.time;
+			const progress = (timeElapsed / previousLyric.duration) * 100;
+			progressBar.style.width = progress + "%";
+		} else {
+			progressBar.style.width = "0";
+		}
+	}
+
+	function highlightTypedWords() {
+		const lyricsText = lyricsContainer.textContent;
+		const typedText = inputDiv.textContent;
+		let highlightedText = "";
+
+		for (let i = 0; i < lyricsText.length; i++) {
+			if (i < typedText.length) {
+				if (lyricsText[i] === typedText[i]) {
+					highlightedText += `<span class="correct">${lyricsText[i]}</span>`;
+				} else {
+					highlightedText += `<span class="incorrect">${lyricsText[i]}</span>`;
+				}
+			} else {
+				highlightedText += lyricsText[i];
+			}
+		}
+		lyricsContainer.innerHTML = highlightedText;
+	}
+
+	function updateScore() {
+		const lyricsText = previousLyric ? previousLyric.text : "";
+		const typedText = currentInput;
+		let localCorrect = 0;
+		let localIncorrect = 0;
+
+		for (let i = 0; i < lyricsText.length; i++) {
+			if (i < typedText.length) {
+				if (lyricsText[i] === typedText[i]) {
+					localCorrect++;
+				} else {
+					localIncorrect++;
+				}
+			}
+		}
+
+		correctLetters += localCorrect;
+		incorrectLetters += localIncorrect;
+		correctLettersDisplay.textContent = correctLetters;
+		incorrectLettersDisplay.textContent = incorrectLetters;
+		scoreDisplay.textContent = correctLetters - incorrectLetters;
+	}
+	
+	
+
+	let totalCharactersTyped = 0;
+	let totalWordsTyped = 0;
+	let totalDuration = 0;
+
+	function updateMetrics() {
+		const currentTime = video.currentTime;
+		const currentInput = inputDiv.textContent.trim();
+		const lyricsText = previousLyric ? previousLyric.text : "";
+
+		// Calculate total characters typed
+		totalCharactersTyped = currentInput.length;
+
+		// Calculate total words typed
+		totalWordsTyped = currentInput.split(/\s+/).filter(word => word !== "").length;
+
+		// Calculate total duration
+		totalDuration = currentTime - (previousLyric ? previousLyric.time : 0);
+
+		// Calculate WPM and WPS
+		const wpm = Math.round((totalWordsTyped / totalDuration) * 60);
+		const wps = Math.round((totalCharactersTyped / totalDuration));
+
+		// Update the WPM and WPS display
+		document.getElementById("wpm").textContent = wpm;
+		document.getElementById("wps").textContent = wps;
+	}
+
+	document.addEventListener("keydown", function(event) {
+		const allowedCharacters = /^[a-zA-Z0-9 .,"';:?!\n\r]$/;
+		const currentTime = video.currentTime;
+		const isVideoPlaying = !video.paused && !video.ended;
+		let lyricsStarted = false;
+		let lyricsDisplayed = lyricsContainer.textContent.trim() !== "";
+
+		for (let i = 0; i < lyrics.length; i++) {
+			if (currentTime >= lyrics[i].time) {
+				lyricsStarted = true;
+				break;
+			}
+		}
+
+		if (isVideoPlaying && lyricsStarted && lyricsDisplayed && (event.keyCode === 8 || event.keyCode === 46 || allowedCharacters.test(event.key)) && event.keyCode !== 13) {
+			if (event.keyCode === 8) {
+				if (currentInput !== "") {
+					currentInput = currentInput.slice(0, -1);
+				}
+			} else if (event.keyCode === 46) {
+				if (currentInput !== "") {
+					currentInput = currentInput.slice(1);
+				}
+			} else {
+				currentInput += event.key;
+			}
+			inputDiv.textContent = currentInput;
+			highlightTypedWords();
+			updateMetrics(); // Call updateMetrics on every keydown event
+			event.preventDefault();
+		} else {
+			event.preventDefault();
+		}
+	});
+
+	const overlayControls = document.getElementById("overlay-controls");
+
+	playpause.addEventListener("click", () => {
+		if (video.paused || video.ended) {
+			video.play();
+			playpause.textContent = "||"; // pause
+			updateLyrics();
+		} else {
+			video.pause();
+			playpause.textContent = "||"; // play
+			overlayControls.style.display = "block"; // Show overlay controls when paused
+		}
+	});
+
+	video.addEventListener("play", () => {
+		overlayControls.style.display = "none"; // Hide overlay controls when playing
+	});
+
+
+	// Event listener for the "Timeupdate" event
+	video.addEventListener("timeupdate", () => {
+		seekBar.value = (video.currentTime / video.duration) * 100;
+		updateLyrics();
+		highlightTypedWords();
+		updateMetrics();
+
+		// Show scoreboard if the video is at the end
+		if (video.currentTime >= video.duration - 0.5) {
+			showScoreboard();
+		} else {
+			hideScoreboard();
+		}
+	});
+
+	// Event listener for the "Ended" event
+	video.addEventListener("ended", () => {
+		showScoreboard(); // Show scoreboard when video ends
+		updateScore(); // Update the score one last time at the end of the video
+	});
+
+
+
+	// Event listener for the "End" button
+	const endButton = document.getElementById("endButton");
+	endButton.addEventListener("click", () => {
+		video.currentTime = video.duration; // Go to the end of the video
+		showScoreboard(); // Show scoreboard
+		updateScore(); // Update the score at the end
+	});
+
+	// Function to show the scoreboard
+	function showScoreboard() {
+		scoreboard.style.display = "block"; // Show scoreboard
+	}
+
+
+
+
+
+	const correctLettersDisplay = document.getElementById("correctLetters");
+	const incorrectLettersDisplay = document.getElementById("incorrectLetters");
+	const scoreDisplay = document.getElementById("score");
+
+	</script>
+	</body>
+	</html>
