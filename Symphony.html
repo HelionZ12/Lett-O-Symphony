@@ -1,4 +1,4 @@
-	<!DOCTYPE html>
+<!DOCTYPE html>
 	<html lang="en">
 	<head>
 		<meta charset="UTF-8">
@@ -33,19 +33,19 @@
 			#custom-controls input {
 				margin: 0 5px;
 			}
-			#input1 {
-				font-size: 50px;
-				text-align: center;
-				justify-content: center;	
-			}
-			#lyrics-container {
-				text-align: center;
-				justify-content: center;
-				top: 100px;
-				font-size: 30px;
-				width: 100%;
-				color: white;
-			}
+#input1 {
+            font-size: 150%;
+            text-align: center;
+            justify-content: center;    
+        }
+        #lyrics-container {
+            text-align: center;
+            justify-content: center;
+            top: 100px;
+            font-size: 160%;
+            width: 100%;
+            color: white;
+        }
 			.correct {
 				color: green;
 			}
@@ -92,9 +92,7 @@
 			display: none;
 	}
 
-	   #additional-controls {
-				display: none;
-			}
+
 
 	#progressBar {
 		height: 100%;
@@ -113,7 +111,7 @@
 
 
 	/* Stylish play/pause button */
-	#playpause {
+#playpause {
 		background-color: silver;
 		border: none;
 		padding: 10px 20px;
@@ -124,9 +122,12 @@
 		cursor: pointer;
 		border-radius: 10%; /* Make it round */
 		transition: background-color 0.3s ease;
+		    position: fixed; /* Fixed positioning */
+    bottom: 15px; /* Adjust top position */
+    right: 40px/* Adjust left position */
+	
+}
 
-
-	}
 
 
 	#playpause:hover {
@@ -134,24 +135,22 @@
 	}
 	
 	
-	#overlay-controls button {
-		background-color: green;
-		border: none;
-		color: white;
-		padding: 10px 20px;
-		text-decoration: none;
-		font-size: 10px;
-		margin: 20px 2px;
-		cursor: pointer;
-		border-radius: 10px;
-		transition: background-color 0.3s ease;
-		    display: flex;
-    flex-direction: column; /* Change to column layout */
-    align-items: center; /* Center the buttons horizontally */
-    justify-content: center; /* Center the buttons vertically */
-    gap: 10px; /* Add some space between buttons */
+	#additional-controls {
+				display: none;
+			}
 
-	}
+#overlay-controls button {
+    background-color: green;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+    gap: 10px; /* Add some space between buttons */
+}
 
 	#overlay-controls button:hover {
 		background-color: #218838;
@@ -176,9 +175,22 @@
 		<h1>Revenge by CaptainSparklez</h1>
 		<button id="startGame">Press Start</button>
 		
+		
+			<div id="overlay-controls" style="display: none;">
+        <button id="restartGame">Reset</button>
+        <button id="endButton">End</button>
+        <button id="exitButton">Exit	</button>
+	
+    </div>
+	    <div id="additional-controls">
+        <p>WPS: <span id="wps">0</span>
+       WPM: <span id="wpm">0</span></p>
+    </div>	
+		
 		<!-- Video container and custom controls -->
 		<div class="video-container" id="videoContainer" style="display: none;">
 			<video id="myVideo" src="Assets/Revenge.mp4"></video>	
+			
 			<div id="lyrics-container"></div>
 			<div id="progressBarContainer">
 				<div id="progressBar"></div>
@@ -191,15 +203,7 @@
     <button id="playpause" style="display: none;">||</button><br>
     <input type="range" id="seek-bar" value="0"><br>
     <input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1">
-    <div id="overlay-controls" style="display: none;">
-        <button id="restartGame">Reset</button>
-        <button id="endButton">End</button>
-        <button id="exitButton">Exit	</button>
-    </div>
-    <div id="additional-controls">
-        <p>WPS: <span id="wps">0</span></p>
-        <p>WPM: <span id="wpm">0</span></p>
-    </div>
+    
 	</div>
 
 
