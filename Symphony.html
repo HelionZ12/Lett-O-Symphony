@@ -258,40 +258,43 @@
 
 
 
-	startButton.addEventListener("click", () => {
-		startButton.style.display = "none"; // Hide the start button
-		videoContainer.style.display = "block"; // Show video container
-		customControls.style.display = "block"; // Show custom controls
+startButton.addEventListener("click", () => {
+    startButton.style.display = "none"; // Hide the start button
+    videoContainer.style.display = "block"; // Show video container
+    customControls.style.display = "block"; // Show custom controls
 
-		// Add countdown logic
-		const countdownDiv = document.createElement("div");
-		countdownDiv.setAttribute("id", "countdown");
-		countdownDiv.style.position = "absolute";
-		countdownDiv.style.top = "50%";
-		countdownDiv.style.left = "50%";
-		countdownDiv.style.transform = "translate(-50%, -50%)";
-		countdownDiv.style.fontSize = "100px";
-		countdownDiv.style.color = "white";
-		document.body.appendChild(countdownDiv);
+    // Add countdown logic
+    const countdownDiv = document.createElement("div");
+    countdownDiv.setAttribute("id", "countdown");
+    countdownDiv.style.position = "absolute";
+    countdownDiv.style.top = "50%";
+    countdownDiv.style.left = "50%";
+    countdownDiv.style.transform = "translate(-50%, -50%)";
+    countdownDiv.style.fontSize = "100px";
+    countdownDiv.style.color = "white";
+    document.body.appendChild(countdownDiv);
 
-		let count = 3;
-		const countdownInterval = setInterval(() => {
-			countdownDiv.textContent = count;
-			count--;
-			if (count < 0) {
-				clearInterval(countdownInterval);
-				document.body.removeChild(countdownDiv);
-				// Start the game after countdown
-				video.play();
-				// Show the play/pause button
-				playpause.style.display = "inline-block";
+    let count = 3;
+    const countdownInterval = setInterval(() => {
+        countdownDiv.textContent = count;
+        count--;
+        if (count < 0) {
+            clearInterval(countdownInterval);
+            document.body.removeChild(countdownDiv);
+            // Start the game after countdown
+            video.play();
+            // Show the play/pause button
+            playpause.style.display = "inline-block";
 
-				// Show progress bar and additional controls after countdown
-				progressBarContainer.style.display = "block";
-				document.getElementById("additional-controls").style.display = "block";
-			}
-		}, 1000);
-	});
+            // Show progress bar and additional controls after countdown
+            progressBarContainer.style.display = "block";
+            document.getElementById("additional-controls").style.display = "block";
+
+            // Focus on the input field when the game starts
+            inputDiv.focus();
+        }
+    }, 1000);
+});
 	const lyrics = [
 			{ time: 4, text: "Creeper, Aw Man", duration: 4 },
 			{ time: 6, text: "So we back in the mine, got our pickaxe swinging from side to side", duration: 10 },
