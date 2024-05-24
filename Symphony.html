@@ -1,523 +1,539 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Lett O Symphony</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            color: white;
-            background-color: black;
-            overflow: hidden;
-            transform: scale(70%);
-        }
-        video {
-            width: 65%;
-            height: auto;
-        }
-        h1 {
-            margin: 20px 5px;
-        }
-        #custom-controls {
-            position: fixed;
-            top: 20px;
-            left: 100px;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 5px;
-            color: white;
-        }
-        #custom-controls button,
-        #custom-controls input {
-            margin: 0 5px;
-        }
-        #input1 {
-            font-size: 50px;
-			text-align: center;
-			justify-content: center;	
-        }
-        #lyrics-container {
-            text-align: center;
-			justify-content: center;
-            top: 100px;
-            font-size: 30px;
-            width: 100%;
-            color: white;
-        }
-        .correct {
-            color: green;
-        }
-        .incorrect {
-            color: red;
-        }
+		<title>Lett O Symphony</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				color: white;
+				background-color: black;
+				overflow: hidden;
+				transform: scale(70%);
+			}
+			video {
+				width: 65%;
+				height: auto;
+			}
+			h1 {
+				margin: 20px 5px;
+			}
+			#custom-controls {
+				position: fixed;
+				top: 20px;
+				left: 100px;
+				transform: translateX(-50%);
+				background: rgba(0, 0, 0, 0.5);
+				border-radius: 5px;
+				color: white;
+			}
+			#custom-controls button,
+			#custom-controls input {
+				margin: 0 5px;
+			}
+			#input1 {
+				font-size: 50px;
+				text-align: center;
+				justify-content: center;	
+			}
+			#lyrics-container {
+				text-align: center;
+				justify-content: center;
+				top: 100px;
+				font-size: 30px;
+				width: 100%;
+				color: white;
+			}
+			.correct {
+				color: green;
+			}
+			.incorrect {
+				color: red;
+			}
 
-        /* Styles for the scoreboard */
-        #scoreboard {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 5px;
-            padding: 20px;
-            color: white;
-            display: none;
-        }
+			/* Styles for the scoreboard */
+			#scoreboard {
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				background: rgba(0, 0, 0, 0.5);
+				border-radius: 5px;
+				padding: 20px;
+				color: white;
+				display: none;
+			}
 
-        /* Stylish start button */
-        #startGame {
-		font-family: Garamond,Baskerville,Baskerville Old Face,Hoefler Text,Times New Roman,serif; 
-            background-color: transparent;
-            border: none;
-            color: white;
-            padding: 100px 10px;
-			margin: 8% 0%;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 100px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+			/* Stylish start button */
+			#startGame {
+			font-family: Garamond,Baskerville,Baskerville Old Face,Hoefler Text,Times New Roman,serif; 
+				background-color: transparent;
+				border: none;
+				color: white;
+				padding: 100px 10px;
+				margin: 8% 0%;
+				text-decoration: none;
+				display: inline-block;
+				font-size: 100px;
+				cursor: pointer;
+				transition: background-color 0.3s ease;
+			}
 
-        #startGame:hover {
-            color: green;
-        }
-		/* Progress bar styles */
-#progressBarContainer {
-    width: 65%; /* Same width as video */
-    height: 5px; /* Height of the progress bar */
-    background-color: rgba(255, 255, 255, 0.3);
-		display: none;
-}
+			#startGame:hover {
+				color: green;
+			}
+			/* Progress bar styles */
+	#progressBarContainer {
+		width: 65%; /* Same width as video */
+		height: 5px; /* Height of the progress bar */
+		background-color: rgba(255, 255, 255, 0.3);
+			display: none;
+	}
 
-   #additional-controls {
-            display: none;
-        }
+	   #additional-controls {
+				display: none;
+			}
 
-#progressBar {
-    height: 100%;
-    width: 0; /* Initially set width to 0 */
-    background-color: #28a745; /* Progress bar color */
+	#progressBar {
+		height: 100%;
+		width: 0; /* Initially set width to 0 */
+		background-color: #28a745; /* Progress bar color */
+		
+	}
+
+	#seek-bar {
+		 display: none; /* Hide the seek bar */
+	}
+
+	#volume-bar {
+		display: none; /* Hide the volume bar */
+	}
+
+
+	/* Stylish play/pause button */
+	#playpause {
+		background-color: silver;
+		border: none;
+		padding: 10px 20px;
+		text-align: center;
+		text-decoration: none;
+		display: inline-block;
+		font-size: 24px;	
+		cursor: pointer;
+		border-radius: 10%; /* Make it round */
+		transition: background-color 0.3s ease;
+
+
+	}
+
+
+	#playpause:hover {
+		background-color: white;
+	}
 	
-}
-
-#seek-bar {
-	 display: none; /* Hide the seek bar */
-}
-
-#volume-bar {
-    display: none; /* Hide the volume bar */
-}
-
-
-/* Stylish play/pause button */
-#playpause {
-    background-color: silver;
-    border: none;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 24px;
-    margin: 20px 2px;
-    cursor: pointer;
-    border-radius: 10%; /* Make it round */
-    transition: background-color 0.3s ease;
-}
-
-#playpause:hover {
-    background-color: white;
-}
-#overlay-controls button {
-    background-color: #28a745;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 20px;
-    margin: 20px 2px;
-    cursor: pointer;
-    border-radius: 10px;
-    transition: background-color 0.3s ease;
-}
-
-#overlay-controls button:hover {
-    background-color: #218838;
-}
-
-@media only screen and (max-width: 600px) {
-    /* CSS styles for mobile devices */
-    body {
-        font-size: 14px;
-        transform: scale(100%);	
-    }
-    /* Adjust other styles as needed */
-}
-
-
-
-    </style>
-</head>
-<body>
-<center>
-    <!-- Title and Play Button -->
-    <h1>Revenge by CaptainSparklez</h1>
-    <button id="startGame">Press Start</button>
 	
-    <!-- Video container and custom controls -->
-    <div class="video-container" id="videoContainer" style="display: none;">
-        <video id="myVideo" src="Assets/Revenge.mp4"></video>	
-        <div id="lyrics-container"></div>
-        <div id="progressBarContainer">
-            <div id="progressBar"></div>
-        </div>
-        <div id="input1" contenteditable="false"></div>
-        <div id="custom-controls" style="display: none;">
-            <button id="playpause" style="display: none;">||</button><br>
+	#overlay-controls button {
+		background-color: green;
+		border: none;
+		color: white;
+		padding: 10px 20px;
+		text-decoration: none;
+		font-size: 10px;
+		margin: 20px 2px;
+		cursor: pointer;
+		border-radius: 10px;
+		transition: background-color 0.3s ease;
+		    display: flex;
+    flex-direction: column; /* Change to column layout */
+    align-items: center; /* Center the buttons horizontally */
+    justify-content: center; /* Center the buttons vertically */
+    gap: 10px; /* Add some space between buttons */
 
-            <input type="range" id="seek-bar" value="0"><br>
-            <input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1">
-            <div id="overlay-controls" style="display: none;">
-                <button id="restartGame">Reset</button>
-                <button id="endButton">End</button>
-                <button id="exitButton">Exit Game</button>
-            </div>
-            <div id="additional-controls">
-                <p>WPS: <span id="wps">0</span></p>
-                <p>WPM: <span id="wpm">0</span></p>
-            </div>
-			
-        </div>
+	}
+
+	#overlay-controls button:hover {
+		background-color: #218838;
+	}
+
+	@media only screen and (max-width: 600px) {
+		/* CSS styles for mobile devices */
+		body {
+			font-size: 14px;
+			transform: scale(100%);	
+		}
+		/* Adjust other styles as needed */
+	}
+
+
+
+		</style>
+	</head>
+	<body>
+	<center>
+		<!-- Title and Play Button -->
+		<h1>Revenge by CaptainSparklez</h1>
+		<button id="startGame">Press Start</button>
+		
+		<!-- Video container and custom controls -->
+		<div class="video-container" id="videoContainer" style="display: none;">
+			<video id="myVideo" src="Assets/Revenge.mp4"></video>	
+			<div id="lyrics-container"></div>
+			<div id="progressBarContainer">
+				<div id="progressBar"></div>
+			</div>
+			<div id="input1" contenteditable="false"></div>
+
+
+
+	<div id="custom-controls" style="display: none;">
+    <button id="playpause" style="display: none;">||</button><br>
+    <input type="range" id="seek-bar" value="0"><br>
+    <input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1">
+    <div id="overlay-controls" style="display: none;">
+        <button id="restartGame">Reset</button>
+        <button id="endButton">End</button>
+        <button id="exitButton">Exit	</button>
     </div>
-</center>
-<!-- Scoreboard -->
-<div id="scoreboard" style="display: none;">
-    <h2>Scoreboard</h2>
-    <p>Correct Letters: <span id="correctLetters">0</span></p>
-    <p>Incorrect Letters: <span id="incorrectLetters">0</span></p>
-    <p>Score: <span id="score">0</span></p>
-</div>
-<script>
-const video = document.getElementById("myVideo");
-const playpause = document.getElementById("playpause");
-const seekBar = document.getElementById("seek-bar");
-const mute = document.getElementById("mute");
-const volumeBar = document.getElementById("volume-bar");
-const lyricsContainer = document.getElementById("lyrics-container");
-const inputDiv = document.getElementById("input1");
-const startButton = document.getElementById("startGame");
-const videoContainer = document.getElementById("videoContainer");
-const customControls = document.getElementById("custom-controls");
-const progressBarContainer = document.getElementById("progressBarContainer");
-const progressBar = document.getElementById("progressBar");
-const restartButton = document.getElementById("restartGame");
-const exitButton = document.getElementById("exitButton");
-exitButton.addEventListener("click", () => {
-    window.location.href = "index.html"; // Correctly navigate to index.html
-});
-
-restartButton.addEventListener("click", () => {
-    // Reset the video to the beginning
-    video.currentTime = 0;
-    // Reset score
-    correctLetters = 0;
-    incorrectLetters = 0;
-    // Update the display of score-related elements
-    correctLettersDisplay.textContent = correctLetters;
-    incorrectLettersDisplay.textContent = incorrectLetters;
-    scoreDisplay.textContent = correctLetters - incorrectLetters;
-    // Hide scoreboard
-    hideScoreboard();
-
-    // Automatically play the video
-    video.play();
-});
-
-
-// Function to hide the scoreboard
-function hideScoreboard() {
-    scoreboard.style.display = "none"; // Hide scoreboard
-}
+    <div id="additional-controls">
+        <p>WPS: <span id="wps">0</span></p>
+        <p>WPM: <span id="wpm">0</span></p>
+    </div>
+	</div>
 
 
 
-startButton.addEventListener("click", () => {
-    startButton.style.display = "none"; // Hide the start button
-    videoContainer.style.display = "block"; // Show video container
-    customControls.style.display = "block"; // Show custom controls
+			</div>
+	</center>
+	<!-- Scoreboard -->
+	<div id="scoreboard" style="display: none;">
+		<h2>Scoreboard</h2>
+		<p>Correct Letters: <span id="correctLetters">0</span></p>
+		<p>Incorrect Letters: <span id="incorrectLetters">0</span></p>
+		<p>Score: <span id="score">0</span></p>
+	</div>
+	<script>
+	const video = document.getElementById("myVideo");
+	const playpause = document.getElementById("playpause");
+	const seekBar = document.getElementById("seek-bar");
+	const mute = document.getElementById("mute");
+	const volumeBar = document.getElementById("volume-bar");
+	const lyricsContainer = document.getElementById("lyrics-container");
+	const inputDiv = document.getElementById("input1");
+	const startButton = document.getElementById("startGame");
+	const videoContainer = document.getElementById("videoContainer");
+	const customControls = document.getElementById("custom-controls");
+	const progressBarContainer = document.getElementById("progressBarContainer");
+	const progressBar = document.getElementById("progressBar");
+	const restartButton = document.getElementById("restartGame");
+	const exitButton = document.getElementById("exitButton");
+	
+	exitButton.addEventListener("click", () => {
+		window.location.href = "index.html"; // Correctly navigate to index.html
+	});
 
-    // Add countdown logic
-    const countdownDiv = document.createElement("div");
-    countdownDiv.setAttribute("id", "countdown");
-    countdownDiv.style.position = "absolute";
-    countdownDiv.style.top = "50%";
-    countdownDiv.style.left = "50%";
-    countdownDiv.style.transform = "translate(-50%, -50%)";
-    countdownDiv.style.fontSize = "100px";
-    countdownDiv.style.color = "white";
-    document.body.appendChild(countdownDiv);
+	restartButton.addEventListener("click", () => {
+		// Reset the video to the beginning
+		video.currentTime = 0;
+		// Reset score
+		correctLetters = 0;
+		incorrectLetters = 0;
+		// Update the display of score-related elements
+		correctLettersDisplay.textContent = correctLetters;
+		incorrectLettersDisplay.textContent = incorrectLetters;
+		scoreDisplay.textContent = correctLetters - incorrectLetters;
+		// Hide scoreboard
+		hideScoreboard();
 
-    let count = 3;
-    const countdownInterval = setInterval(() => {
-        countdownDiv.textContent = count;
-        count--;
-        if (count < 0) {
-            clearInterval(countdownInterval);
-            document.body.removeChild(countdownDiv);
-            // Start the game after countdown
-            video.play();
-            // Show the play/pause button
-            playpause.style.display = "inline-block";
-
-            // Show progress bar and additional controls after countdown
-            progressBarContainer.style.display = "block";
-            document.getElementById("additional-controls").style.display = "block";
-        }
-    }, 1000);
-});
-const lyrics = [
-        { time: 4, text: "Creeper, Aw Man", duration: 4 },
-        { time: 6, text: "So we back in the mine, got our pickaxe swinging from side to side", duration: 10 },
-        { time: 16, text: "This task, a grueling one, hope to find some diamonds tonight, night, night", duration: 8 },
-        { time: 22, text: "Heads up, you hear a sound, turn around and look up. Total shock fills your body", duration: 10.5 },
-        { time: 31, text: "Oh no, it's you again, I can never forget those eyes, eyes, eyes", duration: 8 },
-        { time: 39, text: "Cause baby, tonight, the creeper's trying to steal all our stuff again", duration: 7 },
-        { time: 46, text: "Cause baby, tonight, grab your pick, shovel, and bolt again", duration: 10 },
-        { time: 56, text: "And run, run until it's done, done. Until the sun comes up in the morn", duration: 7 },
-        { time: 63, text: "Cause baby, tonight, the creeper's trying to steal all our stuff again", duration: 9 },
-        { time: 70, text: "Just when you think you're safe, overhear some hissing from right behind", duration: 10 },
-        { time: 78, text: "That's a nice life you have, shame it's gotta end at this time, time, time", duration: 10 },
-        { time: 88, text: "Blows up, then your health bar drops and you could use a one-up", duration: 6 },
-        { time: 94, text: "Get inside, don't be tardy. So now you're stuck in there, Half a heart is left, but don't die, die, die ", duration: 9 },
-        { time: 103, text: "Cause baby, tonight, the creeper's trying to steal all our stuff again", duration: 8 },
-        { time: 111, text: "Cause baby, tonight, grab your pick, shovel, and bolt again", duration: 9 },
-        { time: 120, text: "And run, run until it's done, done. Until the sun comes up in the morn", duration: 7 },
-        { time: 127, text: "Cause, baby, tonight, The creeper's trying to steal all our stuff again ", duration: 6},
-        { time: 136, text: "Dig up diamonds, craft those diamonds, make some armor, get it baby, go and forge that like you so MLG pro, the sword's made of diamonds, so come at me bro", duration: 8.5 },
-        { time: 144, text: "Training in your room under the torchlight. Hone that form to get you ready for the big fight. Every single day and the whole night, creeper's out prowlin, woo, alright", duration: 8 },
-        { time: 152, text: "Look at me, look at you, take my revenge, that's what I'm gonna do, I'm a warrior, baby, what else is new? And my blade's gonna tear through you- Cause, baby, tonight", duration: 9.5 },
-        { time: 161, text: "The creeper's trying to steal all our stuff again", duration: 5 },
-        { time: 167, text: "Yeah, baby, tonight grab your sword, armor and go. Take your revenge!", duration: 9 },
-        { time: 176, text: "So fight, fight, like it's the last, last night of your life, life. Show them your bite", duration: 7 },
-        { time: 183, text: "Cause baby, tonight, the creeper's trying to steal all our stuff again", duration: 8 },
-        { time: 191, text: "Cause baby, tonight, grab your pick, shovel, and bolt again", duration: 9 },
-        { time: 199, text: "And run, run until it's done, done. Until the sun comes up in the morn", duration: 8 },
-        { time: 207, text: "Cause baby, tonight, the creeper's trying to steal all our stuff again", duration: 9 },
-    ];
+		// Automatically play the video
+		video.play();
+	});
 
 
-let previousLyric = null;
-let correctLetters = 0;
-let incorrectLetters = 0;
-let currentInput = '';
-
-function updateLyrics() {
-    const currentTime = video.currentTime;
-    let currentLyric = null;
-    for (let i = 0; i < lyrics.length; i++) {
-        if (currentTime >= lyrics[i].time && currentTime < (lyrics[i].time + lyrics[i].duration)) {
-            currentLyric = lyrics[i];
-            break;
-        }
-    }
-
-    if (currentLyric) {
-        lyricsContainer.textContent = currentLyric.text;
-        if (currentLyric !== previousLyric) {
-            updateScore(); // Update the score when lyrics change
-            inputDiv.textContent = "";
-            currentInput = ''; // Reset the current input
-            previousLyric = currentLyric;
-        }
-        // Show progress bar when lyrics are displayed
-        progressBarContainer.style.display = "block";
-    } else {
-        lyricsContainer.textContent = "";
-        inputDiv.textContent = ""; // Clear typed words when lyrics disappear
-        // Hide progress bar when lyrics are not displayed
-        progressBarContainer.style.display = "none";
-    }
-
-    // Update progress bar width
-    if (previousLyric) {
-        const timeElapsed = currentTime - previousLyric.time;
-        const progress = (timeElapsed / previousLyric.duration) * 100;
-        progressBar.style.width = progress + "%";
-    } else {
-        progressBar.style.width = "0";
-    }
-}
-
-function highlightTypedWords() {
-    const lyricsText = lyricsContainer.textContent;
-    const typedText = inputDiv.textContent;
-    let highlightedText = "";
-
-    for (let i = 0; i < lyricsText.length; i++) {
-        if (i < typedText.length) {
-            if (lyricsText[i] === typedText[i]) {
-                highlightedText += `<span class="correct">${lyricsText[i]}</span>`;
-            } else {
-                highlightedText += `<span class="incorrect">${lyricsText[i]}</span>`;
-            }
-        } else {
-            highlightedText += lyricsText[i];
-        }
-    }
-    lyricsContainer.innerHTML = highlightedText;
-}
-
-function updateScore() {
-    const lyricsText = previousLyric ? previousLyric.text : "";
-    const typedText = currentInput;
-    let localCorrect = 0;
-    let localIncorrect = 0;
-
-    for (let i = 0; i < lyricsText.length; i++) {
-        if (i < typedText.length) {
-            if (lyricsText[i] === typedText[i]) {
-                localCorrect++;
-            } else {
-                localIncorrect++;
-            }
-        }
-    }
-
-    correctLetters += localCorrect;
-    incorrectLetters += localIncorrect;
-    correctLettersDisplay.textContent = correctLetters;
-    incorrectLettersDisplay.textContent = incorrectLetters;
-    scoreDisplay.textContent = correctLetters - incorrectLetters;
-}
-
-let totalCharactersTyped = 0;
-let totalWordsTyped = 0;
-let totalDuration = 0;
-
-function updateMetrics() {
-    const currentTime = video.currentTime;
-    const currentInput = inputDiv.textContent.trim();
-    const lyricsText = previousLyric ? previousLyric.text : "";
-
-    // Calculate total characters typed
-    totalCharactersTyped = currentInput.length;
-
-    // Calculate total words typed
-    totalWordsTyped = currentInput.split(/\s+/).filter(word => word !== "").length;
-
-    // Calculate total duration
-    totalDuration = currentTime - (previousLyric ? previousLyric.time : 0);
-
-    // Calculate WPM and WPS
-    const wpm = Math.round((totalWordsTyped / totalDuration) * 60);
-    const wps = Math.round((totalCharactersTyped / totalDuration));
-
-    // Update the WPM and WPS display
-    document.getElementById("wpm").textContent = wpm;
-    document.getElementById("wps").textContent = wps;
-}
-
-document.addEventListener("keydown", function(event) {
-    const allowedCharacters = /^[a-zA-Z0-9 .,"';:?!\n\r]$/;
-    const currentTime = video.currentTime;
-    const isVideoPlaying = !video.paused && !video.ended;
-    let lyricsStarted = false;
-    let lyricsDisplayed = lyricsContainer.textContent.trim() !== "";
-
-    for (let i = 0; i < lyrics.length; i++) {
-        if (currentTime >= lyrics[i].time) {
-            lyricsStarted = true;
-            break;
-        }
-    }
-
-    if (isVideoPlaying && lyricsStarted && lyricsDisplayed && (event.keyCode === 8 || event.keyCode === 46 || allowedCharacters.test(event.key)) && event.keyCode !== 13) {
-        if (event.keyCode === 8) {
-            if (currentInput !== "") {
-                currentInput = currentInput.slice(0, -1);
-            }
-        } else if (event.keyCode === 46) {
-            if (currentInput !== "") {
-                currentInput = currentInput.slice(1);
-            }
-        } else {
-            currentInput += event.key;
-        }
-        inputDiv.textContent = currentInput;
-        highlightTypedWords();
-        updateMetrics(); // Call updateMetrics on every keydown event
-        event.preventDefault();
-    } else {
-        event.preventDefault();
-    }
-});
-
-const overlayControls = document.getElementById("overlay-controls");
-
-playpause.addEventListener("click", () => {
-    if (video.paused || video.ended) {
-        video.play();
-        playpause.textContent = "||"; // pause
-        updateLyrics();
-    } else {
-        video.pause();
-        playpause.textContent = "||"; // play
-        overlayControls.style.display = "block"; // Show overlay controls when paused
-    }
-});
-
-video.addEventListener("play", () => {
-    overlayControls.style.display = "none"; // Hide overlay controls when playing
-});
-
-
-// Event listener for the "Timeupdate" event
-video.addEventListener("timeupdate", () => {
-    seekBar.value = (video.currentTime / video.duration) * 100;
-    updateLyrics();
-    highlightTypedWords();
-    updateMetrics();
-
-    // Show scoreboard if the video is at the end
-    if (video.currentTime >= video.duration - 0.5) {
-        showScoreboard();
-    } else {
-        hideScoreboard();
-    }
-});
-
-// Event listener for the "Ended" event
-video.addEventListener("ended", () => {
-    showScoreboard(); // Show scoreboard when video ends
-    updateScore(); // Update the score one last time at the end of the video
-});
+	// Function to hide the scoreboard
+	function hideScoreboard() {
+		scoreboard.style.display = "none"; // Hide scoreboard
+	}
 
 
 
-// Event listener for the "End" button
-const endButton = document.getElementById("endButton");
-endButton.addEventListener("click", () => {
-    video.currentTime = video.duration; // Go to the end of the video
-    showScoreboard(); // Show scoreboard
-    updateScore(); // Update the score at the end
-});
+	startButton.addEventListener("click", () => {
+		startButton.style.display = "none"; // Hide the start button
+		videoContainer.style.display = "block"; // Show video container
+		customControls.style.display = "block"; // Show custom controls
 
-// Function to show the scoreboard
-function showScoreboard() {
-    scoreboard.style.display = "block"; // Show scoreboard
-}
+		// Add countdown logic
+		const countdownDiv = document.createElement("div");
+		countdownDiv.setAttribute("id", "countdown");
+		countdownDiv.style.position = "absolute";
+		countdownDiv.style.top = "50%";
+		countdownDiv.style.left = "50%";
+		countdownDiv.style.transform = "translate(-50%, -50%)";
+		countdownDiv.style.fontSize = "100px";
+		countdownDiv.style.color = "white";
+		document.body.appendChild(countdownDiv);
+
+		let count = 3;
+		const countdownInterval = setInterval(() => {
+			countdownDiv.textContent = count;
+			count--;
+			if (count < 0) {
+				clearInterval(countdownInterval);
+				document.body.removeChild(countdownDiv);
+				// Start the game after countdown
+				video.play();
+				// Show the play/pause button
+				playpause.style.display = "inline-block";
+
+				// Show progress bar and additional controls after countdown
+				progressBarContainer.style.display = "block";
+				document.getElementById("additional-controls").style.display = "block";
+			}
+		}, 1000);
+	});
+	const lyrics = [
+			{ time: 4, text: "Creeper, Aw Man", duration: 4 },
+			{ time: 6, text: "So we back in the mine, got our pickaxe swinging from side to side", duration: 10 },
+			{ time: 16, text: "This task, a grueling one, hope to find some diamonds tonight, night, night", duration: 8 },
+			{ time: 22, text: "Heads up, you hear a sound, turn around and look up. Total shock fills your body", duration: 10.5 },
+			{ time: 31, text: "Oh no, it's you again, I can never forget those eyes, eyes, eyes", duration: 8 },
+			{ time: 39, text: "Cause baby, tonight, the creeper's trying to steal all our stuff again", duration: 7 },
+			{ time: 46, text: "Cause baby, tonight, grab your pick, shovel, and bolt again", duration: 10 },
+			{ time: 56, text: "And run, run until it's done, done. Until the sun comes up in the morn", duration: 7 },
+			{ time: 63, text: "Cause baby, tonight, the creeper's trying to steal all our stuff again", duration: 9 },
+			{ time: 70, text: "Just when you think you're safe, overhear some hissing from right behind", duration: 10 },
+			{ time: 78, text: "That's a nice life you have, shame it's gotta end at this time, time, time", duration: 10 },
+			{ time: 88, text: "Blows up, then your health bar drops and you could use a one-up", duration: 6 },
+			{ time: 94, text: "Get inside, don't be tardy. So now you're stuck in there, Half a heart is left, but don't die, die, die ", duration: 9 },
+			{ time: 103, text: "Cause baby, tonight, the creeper's trying to steal all our stuff again", duration: 8 },
+			{ time: 111, text: "Cause baby, tonight, grab your pick, shovel, and bolt again", duration: 9 },
+			{ time: 120, text: "And run, run until it's done, done. Until the sun comes up in the morn", duration: 7 },
+			{ time: 127, text: "Cause, baby, tonight, The creeper's trying to steal all our stuff again ", duration: 6},
+			{ time: 136, text: "Dig up diamonds, craft those diamonds, make some armor, get it baby, go and forge that like you so MLG pro, the sword's made of diamonds, so come at me bro", duration: 8.5 },
+			{ time: 144, text: "Training in your room under the torchlight. Hone that form to get you ready for the big fight. Every single day and the whole night, creeper's out prowlin, woo, alright", duration: 8 },
+			{ time: 152, text: "Look at me, look at you, take my revenge, that's what I'm gonna do, I'm a warrior, baby, what else is new? And my blade's gonna tear through you- Cause, baby, tonight", duration: 9.5 },
+			{ time: 161, text: "The creeper's trying to steal all our stuff again", duration: 5 },
+			{ time: 167, text: "Yeah, baby, tonight grab your sword, armor and go. Take your revenge!", duration: 9 },
+			{ time: 176, text: "So fight, fight, like it's the last, last night of your life, life. Show them your bite", duration: 7 },
+			{ time: 183, text: "Cause baby, tonight, the creeper's trying to steal all our stuff again", duration: 8 },
+			{ time: 191, text: "Cause baby, tonight, grab your pick, shovel, and bolt again", duration: 9 },
+			{ time: 199, text: "And run, run until it's done, done. Until the sun comes up in the morn", duration: 8 },
+			{ time: 207, text: "Cause baby, tonight, the creeper's trying to steal all our stuff again", duration: 9 },
+		];
+
+
+	let previousLyric = null;
+	let correctLetters = 0;
+	let incorrectLetters = 0;
+	let currentInput = '';
+
+	function updateLyrics() {
+		const currentTime = video.currentTime;
+		let currentLyric = null;
+		for (let i = 0; i < lyrics.length; i++) {
+			if (currentTime >= lyrics[i].time && currentTime < (lyrics[i].time + lyrics[i].duration)) {
+				currentLyric = lyrics[i];
+				break;
+			}
+		}
+
+		if (currentLyric) {
+			lyricsContainer.textContent = currentLyric.text;
+			if (currentLyric !== previousLyric) {
+				updateScore(); // Update the score when lyrics change
+				inputDiv.textContent = "";
+				currentInput = ''; // Reset the current input
+				previousLyric = currentLyric;
+			}
+			// Show progress bar when lyrics are displayed
+			progressBarContainer.style.display = "block";
+		} else {
+			lyricsContainer.textContent = "";
+			inputDiv.textContent = ""; // Clear typed words when lyrics disappear
+			// Hide progress bar when lyrics are not displayed
+			progressBarContainer.style.display = "none";
+		}
+
+		// Update progress bar width
+		if (previousLyric) {
+			const timeElapsed = currentTime - previousLyric.time;
+			const progress = (timeElapsed / previousLyric.duration) * 100;
+			progressBar.style.width = progress + "%";
+		} else {
+			progressBar.style.width = "0";
+		}
+	}
+
+	function highlightTypedWords() {
+		const lyricsText = lyricsContainer.textContent;
+		const typedText = inputDiv.textContent;
+		let highlightedText = "";
+
+		for (let i = 0; i < lyricsText.length; i++) {
+			if (i < typedText.length) {
+				if (lyricsText[i] === typedText[i]) {
+					highlightedText += `<span class="correct">${lyricsText[i]}</span>`;
+				} else {
+					highlightedText += `<span class="incorrect">${lyricsText[i]}</span>`;
+				}
+			} else {
+				highlightedText += lyricsText[i];
+			}
+		}
+		lyricsContainer.innerHTML = highlightedText;
+	}
+
+	function updateScore() {
+		const lyricsText = previousLyric ? previousLyric.text : "";
+		const typedText = currentInput;
+		let localCorrect = 0;
+		let localIncorrect = 0;
+
+		for (let i = 0; i < lyricsText.length; i++) {
+			if (i < typedText.length) {
+				if (lyricsText[i] === typedText[i]) {
+					localCorrect++;
+				} else {
+					localIncorrect++;
+				}
+			}
+		}
+
+		correctLetters += localCorrect;
+		incorrectLetters += localIncorrect;
+		correctLettersDisplay.textContent = correctLetters;
+		incorrectLettersDisplay.textContent = incorrectLetters;
+		scoreDisplay.textContent = correctLetters - incorrectLetters;
+	}
+	
+	
+
+	let totalCharactersTyped = 0;
+	let totalWordsTyped = 0;
+	let totalDuration = 0;
+
+	function updateMetrics() {
+		const currentTime = video.currentTime;
+		const currentInput = inputDiv.textContent.trim();
+		const lyricsText = previousLyric ? previousLyric.text : "";
+
+		// Calculate total characters typed
+		totalCharactersTyped = currentInput.length;
+
+		// Calculate total words typed
+		totalWordsTyped = currentInput.split(/\s+/).filter(word => word !== "").length;
+
+		// Calculate total duration
+		totalDuration = currentTime - (previousLyric ? previousLyric.time : 0);
+
+		// Calculate WPM and WPS
+		const wpm = Math.round((totalWordsTyped / totalDuration) * 60);
+		const wps = Math.round((totalCharactersTyped / totalDuration));
+
+		// Update the WPM and WPS display
+		document.getElementById("wpm").textContent = wpm;
+		document.getElementById("wps").textContent = wps;
+	}
+
+	document.addEventListener("keydown", function(event) {
+		const allowedCharacters = /^[a-zA-Z0-9 .,"';:?!\n\r]$/;
+		const currentTime = video.currentTime;
+		const isVideoPlaying = !video.paused && !video.ended;
+		let lyricsStarted = false;
+		let lyricsDisplayed = lyricsContainer.textContent.trim() !== "";
+
+		for (let i = 0; i < lyrics.length; i++) {
+			if (currentTime >= lyrics[i].time) {
+				lyricsStarted = true;
+				break;
+			}
+		}
+
+		if (isVideoPlaying && lyricsStarted && lyricsDisplayed && (event.keyCode === 8 || event.keyCode === 46 || allowedCharacters.test(event.key)) && event.keyCode !== 13) {
+			if (event.keyCode === 8) {
+				if (currentInput !== "") {
+					currentInput = currentInput.slice(0, -1);
+				}
+			} else if (event.keyCode === 46) {
+				if (currentInput !== "") {
+					currentInput = currentInput.slice(1);
+				}
+			} else {
+				currentInput += event.key;
+			}
+			inputDiv.textContent = currentInput;
+			highlightTypedWords();
+			updateMetrics(); // Call updateMetrics on every keydown event
+			event.preventDefault();
+		} else {
+			event.preventDefault();
+		}
+	});
+
+	const overlayControls = document.getElementById("overlay-controls");
+
+	playpause.addEventListener("click", () => {
+		if (video.paused || video.ended) {
+			video.play();
+			playpause.textContent = "||"; // pause
+			updateLyrics();
+		} else {
+			video.pause();
+			playpause.textContent = "||"; // play
+			overlayControls.style.display = "block"; // Show overlay controls when paused
+		}
+	});
+
+	video.addEventListener("play", () => {
+		overlayControls.style.display = "none"; // Hide overlay controls when playing
+	});
+
+
+	// Event listener for the "Timeupdate" event
+	video.addEventListener("timeupdate", () => {
+		seekBar.value = (video.currentTime / video.duration) * 100;
+		updateLyrics();
+		highlightTypedWords();
+		updateMetrics();
+
+		// Show scoreboard if the video is at the end
+		if (video.currentTime >= video.duration - 0.5) {
+			showScoreboard();
+		} else {
+			hideScoreboard();
+		}
+	});
+
+	// Event listener for the "Ended" event
+	video.addEventListener("ended", () => {
+		showScoreboard(); // Show scoreboard when video ends
+		updateScore(); // Update the score one last time at the end of the video
+	});
+
+
+
+	// Event listener for the "End" button
+	const endButton = document.getElementById("endButton");
+	endButton.addEventListener("click", () => {
+		video.currentTime = video.duration; // Go to the end of the video
+		showScoreboard(); // Show scoreboard
+		updateScore(); // Update the score at the end
+	});
+
+	// Function to show the scoreboard
+	function showScoreboard() {
+		scoreboard.style.display = "block"; // Show scoreboard
+	}
 
 
 
 
 
-const correctLettersDisplay = document.getElementById("correctLetters");
-const incorrectLettersDisplay = document.getElementById("incorrectLetters");
-const scoreDisplay = document.getElementById("score");
+	const correctLettersDisplay = document.getElementById("correctLetters");
+	const incorrectLettersDisplay = document.getElementById("incorrectLetters");
+	const scoreDisplay = document.getElementById("score");
 
-</script>
-</body>
-</html>
+	</script>
+	</body>
+	</html>
