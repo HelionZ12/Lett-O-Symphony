@@ -15,14 +15,7 @@
 	    font-family: Fredoka;
         }
 
-        #wavy-note-image 
-	{
-            position: absolute;
-            top: 291px;
-            right: 0px;
-            width: 900px;
-            height: auto;
-        }
+
 
         #note-image 
 	{
@@ -35,52 +28,44 @@
 
         #logo-image 
 	{
-            position: absolute;
-            top: 75px;
-            left: 140px;
-            width: 1000px;
-            height: auto;
+	margin: 50px 5px;
+            width: 70vw; 
+            height: 20vw;
+			z-index:-5;
         }
 
-        #start-button-image 
-	{
-            position: absolute;
-            top: 420px;
-            left: 135px;
-            width: 415px;
-            height: 305px;
-        }
 
 	#sel-diff-image 
 	{
-	    position: absolute;
-            top: 356px;
-            left: 178px;
             width: 355px;
             height: 90px;
 	}
 	
 	#back-butt-image 
 	{
-	    position: absolute;
-            top: 359px;
-            left: 128px;
+
             width: 80px;
             height: 90px;
 	}
 
-        .button 
-	{
-            position: absolute;
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+
+        .buttons
+	{	
+	 display:block;
+	 padding: 2% 0px;
+	 width: 40vw;
+	  height: 50px;
             color: white;
-            background-color: #000000;
-            border: none;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
+            background-color: transparent;
             font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease; /* Add smooth transition */
         }
 
         .button1:hover 
@@ -109,49 +94,46 @@
 
         #button1 
 	{
-            top: 444px;
-            left: 256px;
-            padding: 22px 101px;
+ border: 2px solid white;
         }
 
         #button2 
 	{
-            top: 509px;
-            left: 256px;
-            padding: 22px 112px;
+border: 2px solid white;
         }
 
         #button3 
 	{
-            top: 575px;
-            left: 256px;
-            padding: 22px 92px;
+border: 2px solid white;
         }
 
         #button4 
 	{
-            top: 641px;
-            left: 256px;
-            padding: 22px 106px;
+border: 2px solid white;
         }
 
 </style>
 
 </head>
 <body>
+<center>
     <img id="note-image" src="Assets/note2-removebg-preview.png">
     <img id="logo-image" src="Assets/LettOLogo2-removebg-preview.png">
-    <img id="start-button-image" src="Assets/Home_Page-removebg-preview.png">
-    <img id="sel-diff-image" src="Assets/SelDiff-removebg-preview.png">
-    <a href ="index.html">
+	<div>
+	  <a href ="index.html">
     <img id="back-butt-image" src="Assets/BackButt-removebg-preview.png">
 	</a>
-    <img id="wavy-note-image" src="Assets/WavyNote-removebg-preview.png">
+    <img id="sel-diff-image" src="Assets/SelDiff-removebg-preview.png">
+  </div>
 
-   <a href ="Practice.html"> <button id="button1" class="button">Practice</button></a>
-    <a href ="Easy.html"> <button id="button2" class="button">Easy</button> </a>
-	<a href ="Symphony.html"><button id="button3" class="button">Symphony</button> </a>
-    <a href ="Insane.html"> <button id="button4" class="button">Insane</button> </a>
-
+	
+<div class="buttons">
+   <a href ="Practice.html"> <button id="button1" class="buttons">Practice</button></a>
+    <a href ="Easy.html"> <button id="button2" class="buttons">Easy</button> </a>
+	<a href ="Symphony.html"><button id="button3" class="buttons">Symphony</button> </a>
+    <a href ="Insane.html"> <button id="button4" class="buttons">Insane</button> </a>
+	</div>
+	
+</center>
 </body>
 </html>
