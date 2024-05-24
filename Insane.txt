@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>Lett O Symphony</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				color: white;
+				background-color: black;
+				overflow: hidden;
+				transform: scale(70%);
+			}
+			video {
+				width: 65%;
+				height: auto;
+			}
+			h1 {
+				margin: 20px 5px;
+			}
+			#custom-controls {
+				position: fixed;
+				top: 20px;
+				left: 100px;
+				transform: translateX(-50%);
+				background: rgba(0, 0, 0, 0.5);
+				border-radius: 5px;
+				color: white;
+			}
+			#custom-controls button,
+			#custom-controls input {
+				margin: 0 5px;
+			}
+#input1 {
+            font-size: 150%;
+            text-align: center;
+            justify-content: center;  
+			font-family: 'Courier New', monospace;
+			
+        }
+        #lyrics-container {
+            text-align: center;
+            justify-content: center;
+            top: 100px;
+            font-size: 160%;
+            width: 100%;
+            color: white;
+        }
+			.correct {
+				color: green;
+			}
+			.incorrect {
+				color: red;
+			}
+
+			/* Styles for the scoreboard */
+			#scoreboard {
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				background: rgba(0, 0, 0, 0.5);
+				border-radius: 5px;
+				padding: 20px;
+				color: white;
+				display: none;
+			}
+
+			/* Stylish start button */
+			#startGame {
+			font-family: Garamond,Baskerville,Baskerville Old Face,Hoefler Text,Times New Roman,serif; 
+				background-color: transparent;
+				border: none;
+				color: white;
+				padding: 100px 10px;
+				margin: 8% 0%;
+				text-decoration: none;
+				display: inline-block;
+				font-size: 100px;
+				cursor: pointer;
+				transition: background-color 0.3s ease;
+			}
+
+			#startGame:hover {
+				color: green;
+			}
+			/* Progress bar styles */
+	#progressBarContainer {
+		width: 65%; /* Same width as video */
+		height: 5px; /* Height of the progress bar */
+		background-color: rgba(255, 255, 255, 0.3);
+			display: none;
+	}
+
+
+
+	#progressBar {
+		height: 100%;
+		width: 0; /* Initially set width to 0 */
+		background-color: #28a745; /* Progress bar color */
+		
+	}
+
+	#seek-bar {
+		 display: none; /* Hide the seek bar */
+	}
+
+	#volume-bar {
+		display: none; /* Hide the volume bar */
+	}
+
+
+	/* Stylish play/pause button */
+#playpause {
+		background-color: silver;
+		border: none;
+		padding: 10px 20px;
+		text-align: center;
+		text-decoration: none;
+		display: inline-block;
+		font-size: 24px;	
+		cursor: pointer;
+		border-radius: 10%; /* Make it round */
+		transition: background-color 0.3s ease;
+		    position: fixed; /* Fixed positioning */
+    bottom: 15px; /* Adjust top position */
+    right: 40px/* Adjust left position */
+	
+}
+
+
+
+	#playpause:hover {
+		background-color: white;
+	}
+	
+	
+	#additional-controls {
+				display: none;
+			}
+
+#overlay-controls button {
+    background-color: green;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+    gap: 10px; /* Add some space between buttons */
+}
+
+	#overlay-controls button:hover {
+		background-color: #218838;
+	}
+
+	@media only screen and (max-width: 600px) {
+		/* CSS styles for mobile devices */
+		body {
+			font-size: 14px;
+			transform: scale(100%);	
+		}
+		/* Adjust other styles as needed */
+	}
+
+
+
+		</style>
+	</head>
+	<body>
+	<center>
+		<!-- Title and Play Button -->
+    <h1>Godzilla by Eminem</h1>
+		<button id="startGame">Press Start</button>
+		
+		
+			<div id="overlay-controls" style="display: none;">
+        <button id="restartGame">Reset</button>
+        <button id="endButton">End</button>
+        <button id="exitButton">Exit	</button>
+	
+    </div>
+	    <div id="additional-controls">
+        <p>WPS: <span id="wps">0</span>
+       WPM: <span id="wpm">0</span></p>
+    </div>	
+		
+		<!-- Video container and custom controls -->
+		<div class="video-container" id="videoContainer" style="display: none;">
+			<video id="myVideo" src="Assets/godzilla.mp4"></video>	
+			
+			<div id="lyrics-container"></div>
+			<div id="progressBarContainer">
+				<div id="progressBar"></div>
+			</div>
+			<div id="input1" contenteditable="true">START HERE</div>
+
+
+
+	<div id="custom-controls" style="display: none;">
+    <button id="playpause" style="display: none;">||</button><br>
+    <input type="range" id="seek-bar" value="0"><br>
+    <input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1">
+    
+	</div>
+
+
+
+			</div>
+	</center>
+	<!-- Scoreboard -->
+	<div id="scoreboard" style="display: none;">
+		<h2>Scoreboard</h2>
+		<p>Correct Letters: <span id="correctLetters">0</span></p>
+		<p>Incorrect Letters: <span id="incorrectLetters">0</span></p>
+		<p>Score: <span id="score">0</span></p>
+	</div>
+	<script>
+	const video = document.getElementById("myVideo");
+	const playpause = document.getElementById("playpause");
+	const seekBar = document.getElementById("seek-bar");
+	const mute = document.getElementById("mute");
+	const volumeBar = document.getElementById("volume-bar");
+	const lyricsContainer = document.getElementById("lyrics-container");
+	const inputDiv = document.getElementById("input1");
+	const startButton = document.getElementById("startGame");
+	const videoContainer = document.getElementById("videoContainer");
+	const customControls = document.getElementById("custom-controls");
+	const progressBarContainer = document.getElementById("progressBarContainer");
+	const progressBar = document.getElementById("progressBar");
+	const restartButton = document.getElementById("restartGame");
+	const exitButton = document.getElementById("exitButton");
+	
+	exitButton.addEventListener("click", () => {
+		window.location.href = "index.html"; // Correctly navigate to index.html
+	});
+
+	restartButton.addEventListener("click", () => {
+		// Reset the video to the beginning
+		video.currentTime = 0;
+		// Reset score
+		correctLetters = 0;
+		incorrectLetters = 0;
+		// Update the display of score-related elements
+		correctLettersDisplay.textContent = correctLetters;
+		incorrectLettersDisplay.textContent = incorrectLetters;
+		scoreDisplay.textContent = correctLetters - incorrectLetters;
+		// Hide scoreboard
+		hideScoreboard();
+
+		// Automatically play the video
+		video.play();
+	});
+
+
+	// Function to hide the scoreboard
+	function hideScoreboard() {
+		scoreboard.style.display = "none"; // Hide scoreboard
+	}
+
+
+
+startButton.addEventListener("click", () => {
+    startButton.style.display = "none"; // Hide the start button
+    videoContainer.style.display = "block"; // Show video container
+    customControls.style.display = "block"; // Show custom controls
+
+    // Add countdown logic
+    const countdownDiv = document.createElement("div");
+    countdownDiv.setAttribute("id", "countdown");
+    countdownDiv.style.position = "absolute";
+    countdownDiv.style.top = "50%";
+    countdownDiv.style.left = "50%";
+    countdownDiv.style.transform = "translate(-50%, -50%)";
+    countdownDiv.style.fontSize = "100px";
+    countdownDiv.style.color = "white";
+    document.body.appendChild(countdownDiv);
+
+    let count = 3;
+    const countdownInterval = setInterval(() => {
+        countdownDiv.textContent = count;
+        count--;
+        if (count < 0) {
+            clearInterval(countdownInterval);
+            document.body.removeChild(countdownDiv);
+            // Start the game after countdown
+            video.play();
+            // Show the play/pause button
+            playpause.style.display = "inline-block";
+
+            // Show progress bar and additional controls after countdown
+            progressBarContainer.style.display = "block";
+            document.getElementById("additional-controls").style.display = "block";
+
+            // Focus on the input field when the game starts
+            inputDiv.focus();
+        }
+    }, 1000);
+});
+// Lyrics here
+const lyrics = [
+    { time: 0, text: "Ugh, you're a monster", duration: 2.5 },
+
+    { time: 2.5, text: "I can swallow a bottle of alcohol and I'll feel like Godzilla", duration: 4 },
+    { time: 6.5, text: "Better hit the deck like the card dealer", duration: 2.5 },
+    { time: 8.5, text: "My whole squad's in here, walking around the party", duration: 3 },
+    { time: 11.5, text: "A cross between a zombie apocalypse and Bobby \"The Brain\" Heenan", duration: 3.5 },
+    { time: 15, text: "Which is probably the same reason I wrestle with mania", duration: 2 },
+    { time: 17, text: "Shady's in this bitch, I'm posse'd up", duration: 2 },
+    { time: 19 , text: "Consider it to cross me a costly mistake", duration: 2 },
+    { time: 21, text: "If they sleepin' on me, the hoes better get insomnia", duration: 2.5 },
+    { time: 23.5, text: "ADHD, Hydroxycut", duration: 1.5 },
+    { time: 25, text: "Pass the Courvoisier", duration: 2 },
+    { time: 27, text: "In AA with an AK, melee, finna set it like a playdate", duration: 3 },
+    { time: 30, text: "Better vacate, retreat like a vacay, mayday duration: 2.5 },
+    { time: 32.5, text: "This beat is cray cray, Ray J, H A H A H A", duration: 2 },
+    { time: 34.5, text: "Laughing all the way to the bank, I spray flames", duration: 2 },
+    { time: 36.5, text: "They cannot tame or placate the", duration: 1 },
+
+    { time: 37.5, text: "Monster", duration: 1 },
+    { time: 38.5, text: "You get in my way, I'ma feed you to the monster", duration: 2.5 },
+    { time: 41, text: "I'm normal during the day, but at night, turn to a monster", duration: 2.5 },
+    { time: 43.5, text: "When the moon shines like Ice Road Truckers", duration: 2.5 },
+    { time: 46, text: "I look like a villain outta those blockbusters", duration: 3 },
+    { time: 49, text: "Godzilla, fire spitter, monster", duration: 2.5 },
+    { time: 51.5, text: "Blood on the dance floor, and on the Louis V carpet", duration: 3.5 },
+    { time: 55, text: "Fire, Godzilla, fire, monster", duration: 3 },
+    { time: 58, text: "Blood on the dance floor, and on the Louis V carpet", duration: 2.5 },
+
+    { time: 60.5, text: "I'm just a product of Slick Rick and Onyx, told 'em lick the balls", duration: 3 },
+    { time: 63.5, text: "Had 'em just appalled, did so many things that pissed 'em off", duration: 2 },
+    { time: 65.5, text: "It's impossible to list 'em all", duration: 1 },
+    { time: 66.5, text: "And in the midst of all this", duration: 1	 },
+    { time: 67.5, text: "I'm in a mental hospital with a crystal ball", duration: 1 },
+    { time: 68.5, text: "Tryna see, will I still be like this tomorrow?", duration: 1.5 },
+    { time: 70, text: "Risperdal, voices whisper", duration: 1.5 },
+    { time: 71.5, text: "My fist is balled back up against the wall, pencil drawn", duration: 3 },
+    { time: 74.5, text: "This is just the song to go ballistic on", duration: 1.5 },
+    { time: 76, text: "You just pulled a pistol on the guy with a missile launcher", duration: 2.5 },
+    { time: 78.5, text: "I'm just a Loch Ness, the mythological", duration: 1.5 },
+    { time: 80, text: "Quick to tell a bitch screw off like a fifth of vodka", duration: 2.5 },
+    { time: 82.5, text: "When you twist the top of the bottle, I'm a", duration: 1.5 },
+
+    { time: 84, text: "Monster", duration: 1 },
+    { time: 85, text: "You get in my way, I'ma feed you to the monster", duration: 2.5 },
+    { time: 87.5, text: "I'm normal during the day, but at night, turn to a monster", duration: 2.5 },
+    { time: 90, text: "When the moon shines like Ice Road Truckers", duration: 2.5 },
+    { time: 92.5, text: "I look like a villain outta those blockbusters", duration: 3 },
+    { time: 95.5, text: "Godzilla, fire spitter, monster", duration: 2.5 },
+    { time: 98, text: "Blood on the dance floor, and on the Louis V carpet", duration: 3 },
+    { time: 101, text: "Fire, Godzilla, fire, monster", duration: 2.5 },
+    { time: 103.5, text: "Blood on the dance floor, and on the Louis V carpet", duration: 2 },
+
+    { time: 105.5, text: "If you never gave a damn, raise your hand", duration: 2.5 },
+    { time: 108, text: "Cause I'm about to set trip, vacation plans", duration: 3.5 },
+    { time: 111.5, text: "I'm on point like my index is, so all you will ever get is", duration: 3.5 },
+    { time: 115, text: "The motherfuckin' finger (Finger), prostate exam", duration: 3 },
+    { time: 118, text: "How can I have all these fans and perspire?", duration: 1.5 },
+    { time: 119.5, text: "Like a liar's pants, I'm on fire", duration: 1.5 },
+    { time: 121, text: "And I got no plans to retire and I'm still the man you admire", duration: 3 },
+    { time: 124, text: "These chicks are spazzin' out, I only get more handsome and flyer", duration: 3 },
+    { time: 127, text: "I got 'em passin' out like what you do when you hand someone flyers", duration: 3 },
+    { time: 130, text: "What goes around comes around just like the blades on the chainsaw", duration: 2.5 },
+    { time: 132.5, text: "Cause I caught the flack, but my dollars stacked right off the bat like a baseball", duration: 3 },
+    { time: 135.5, text: "Like Kid Ink, bitch, I got them racks with so much ease that they call me Diddy", duration: 3 },
+    { time: 138.5, text: "'Cause I make bands and I call getting cheese a cakewalk", duration: 3 },
+    { time: 141.5, text: "Bitch, I'm a player, I'm too motherfuckin' stingy for Cher", duration: 2 },
+    { time: 143.5, text: "Won't even lend you an ear, ain't even pretending to care", duration: 2.5 },
+    { time: 146, text: "But I tell a bitch I'll marry her if she'll bury her", duration: 2 },
+    { time: 148, text: "Face in my genital area, the original Richard Ramirez", duration: 2.5 },
+    { time: 150.5, text: "Cristhian Rivera, 'cause my lyrics never sit well", duration: 1.5 },
+    { time: 152, text: "So they wanna give me the chair", duration: 1 },
+    { time: 153, text: "Like a paraplegic, and it's scary, call it Hari Kari", duration: 2.5 },
+    { time: 155.5, text: "'Cause e'ry Tom and Dick and Harry carry a Merriam motherfuckin' dictionary on 'em", duration: 3 },
+    { time: 158.5, text: "Swearing up and down they can spit, this shit's hilarious", duration: 1.5 },
+    { time: 160, text: "It's time to put these bitches in the obituary column", duration: 2 },
+    { time: 162, text: "We wouldn't see eye to eye with a staring problem", duration: 2 },
+    { time: 164, text: "Get the shaft like a steering column", duration: 1.5 },
+
+    { time: 165.5, text: "Trigger happy, pack heat, but it's black ink", duration: 1.5 },
+    { time: 167, text: "Evil half of the Bad Meets Evil, that means take a back seat", duration: 2 },
+    { time: 169, text: "Take it back to Fat Beats with a maxi single", duration: 1.5 },
+    { time: 170.5, text: "Look at my rap sheets, what attracts these people", duration: 2 },
+    { time: 172.5, text: "Is my gangster, bitch, like Apache with a catchy jingle", duration: 2 },
+    { time: 174.5, text: "I stack chips, you barely got a half eaten Cheeto", duration: 2 },
+	
+	{ time: 177, text: "INCOMING!!!", duration: 13 },
+	
+    { time: 190, text: "Fill 'em with the venom, and eliminate 'em", duration: 1 },
+    { time: 191, text: "Other words, I Minute Maid 'em", duration: 1 },
+    { time: 192, text: "I don't wanna hurt 'em, but I did, I'm in a fit of rage", duration: 1 },
+    { time: 193, text: "I'm murderin' again, nobody will evade", duration: 1 },
+    { time: 194, text: "I'm finna kill 'em, and dump all the fuckin' bodies in the lake", duration: 1.5 },
+    { time: 195.5, text: "Obliteratin' everything, incinerate a renegade", duration: 1 },
+    { time: 196.5, text: "I'm here to make anybody who want it with the pen afraid", duration: 1.5 },
+    { time: 197.5, text: "But don't nobody want it but they're gonna get it anyway", duration: 2 },
+    { time: 199.5, text: "'Cause I'm beginnin' to feel like I'm mentally ill", duration:1 },
+    { time: 200.5, text: "I'm Atilla, kill or be killed, I'm a killer bee", duration: 1 },
+    { time: 201.5, text: "The vanilla gorilla, you're bringin' the killer within me", duration: 2 },
+    { time: 203.5, text: "Out of me, you don't want to be the enemy of the demon", duration: 1.5 },
+    { time: 205, text: "Who went in me, and be on the receiving of me, what stupidity it'd be", duration: 2 },
+    { time: 207, text: "Every bit of me is the epitome of a spitter", duration: 1 },
+    { time: 208, text: "When I'm in the vicinity, motherfucker, you better duck", duration: 1.5 },
+    { time: 209.5, text: "Or you finna be dead the minute you run into me", duration: 1 },
+    { time: 210.5, text: "A hundred percent of you is a fifth of a percent of me", duration: 1.5 },
+    { time: 212, text: "I'm 'bout to fuckin' finish you, bitch, I'm unfadable", duration: 2 },
+    { time: 214, text: "You wanna battle, I'm available, I'm blowin' up like an inflatable", duration: 2 },
+    { time: 216, text: "I'm undebatable, I'm unavoidable, I'm unevadable", duration: 1.5 },
+    { time: 217.5, text: "I'm on the toilet bowl, I got a trailer full of money and I'm paid in full", duration: 2 },
+    { time: 219, text: "I'm not afraid to pull a", duration: 1 },
+
+    { time: 220, text: "Man, stop", duration: 1 },
+    { time: 221, text: "Look what I'm plannin", duration: 2 },
+];
+
+
+
+	let previousLyric = null;
+	let correctLetters = 0;
+	let incorrectLetters = 0;
+	let currentInput = '';
+
+	function updateLyrics() {
+		const currentTime = video.currentTime;
+		let currentLyric = null;
+		for (let i = 0; i < lyrics.length; i++) {
+			if (currentTime >= lyrics[i].time && currentTime < (lyrics[i].time + lyrics[i].duration)) {
+				currentLyric = lyrics[i];
+				break;
+			}
+		}
+
+		if (currentLyric) {
+			lyricsContainer.textContent = currentLyric.text;
+			if (currentLyric !== previousLyric) {
+				updateScore(); // Update the score when lyrics change
+				inputDiv.textContent = "";
+				currentInput = ''; // Reset the current input
+				previousLyric = currentLyric;
+			}
+			// Show progress bar when lyrics are displayed
+			progressBarContainer.style.display = "block";
+		} else {
+			lyricsContainer.textContent = "";
+			inputDiv.textContent = ""; // Clear typed words when lyrics disappear
+			// Hide progress bar when lyrics are not displayed
+			progressBarContainer.style.display = "none";
+		}
+
+		// Update progress bar width
+		if (previousLyric) {
+			const timeElapsed = currentTime - previousLyric.time;
+			const progress = (timeElapsed / previousLyric.duration) * 100;
+			progressBar.style.width = progress + "%";
+		} else {
+			progressBar.style.width = "0";
+		}
+	}
+
+	function highlightTypedWords() {
+		const lyricsText = lyricsContainer.textContent;
+		const typedText = inputDiv.textContent;
+		let highlightedText = "";
+
+		for (let i = 0; i < lyricsText.length; i++) {
+			if (i < typedText.length) {
+				if (lyricsText[i] === typedText[i]) {
+					highlightedText += `<span class="correct">${lyricsText[i]}</span>`;
+				} else {
+					highlightedText += `<span class="incorrect">${lyricsText[i]}</span>`;
+				}
+			} else {
+				highlightedText += lyricsText[i];
+			}
+		}
+		lyricsContainer.innerHTML = highlightedText;
+	}
+
+	function updateScore() {
+		const lyricsText = previousLyric ? previousLyric.text : "";
+		const typedText = currentInput;
+		let localCorrect = 0;
+		let localIncorrect = 0;
+
+		for (let i = 0; i < lyricsText.length; i++) {
+			if (i < typedText.length) {
+				if (lyricsText[i] === typedText[i]) {
+					localCorrect++;
+				} else {
+					localIncorrect++;
+				}
+			}
+		}
+
+		correctLetters += localCorrect;
+		incorrectLetters += localIncorrect;
+		correctLettersDisplay.textContent = correctLetters;
+		incorrectLettersDisplay.textContent = incorrectLetters;
+		scoreDisplay.textContent = correctLetters - incorrectLetters;
+	}
+	
+	
+
+	let totalCharactersTyped = 0;
+	let totalWordsTyped = 0;
+	let totalDuration = 0;
+
+	function updateMetrics() {
+		const currentTime = video.currentTime;
+		const currentInput = inputDiv.textContent.trim();
+		const lyricsText = previousLyric ? previousLyric.text : "";
+
+		// Calculate total characters typed
+		totalCharactersTyped = currentInput.length;
+
+		// Calculate total words typed
+		totalWordsTyped = currentInput.split(/\s+/).filter(word => word !== "").length;
+
+		// Calculate total duration
+		totalDuration = currentTime - (previousLyric ? previousLyric.time : 0);
+
+		// Calculate WPM and WPS
+		const wpm = Math.round((totalWordsTyped / totalDuration) * 60);
+		const wps = Math.round((totalCharactersTyped / totalDuration));
+
+		// Update the WPM and WPS display
+		document.getElementById("wpm").textContent = wpm;
+		document.getElementById("wps").textContent = wps;
+	}
+
+	document.addEventListener("keydown", function(event) {
+		const allowedCharacters = /^[a-zA-Z0-9 .,"';:?!\n\r]$/;
+		const currentTime = video.currentTime;
+		const isVideoPlaying = !video.paused && !video.ended;
+		let lyricsStarted = false;
+		let lyricsDisplayed = lyricsContainer.textContent.trim() !== "";
+
+		for (let i = 0; i < lyrics.length; i++) {
+			if (currentTime >= lyrics[i].time) {
+				lyricsStarted = true;
+				break;
+			}
+		}
+
+		if (isVideoPlaying && lyricsStarted && lyricsDisplayed && (event.keyCode === 8 || event.keyCode === 46 || allowedCharacters.test(event.key)) && event.keyCode !== 13) {
+			if (event.keyCode === 8) {
+				if (currentInput !== "") {
+					currentInput = currentInput.slice(0, -1);
+				}
+			} else if (event.keyCode === 46) {
+				if (currentInput !== "") {
+					currentInput = currentInput.slice(1);
+				}
+			} else {
+				currentInput += event.key;
+			}
+			inputDiv.textContent = currentInput;
+			highlightTypedWords();
+			updateMetrics(); // Call updateMetrics on every keydown event
+			event.preventDefault();
+		} else {
+			event.preventDefault();
+		}
+	});
+
+	const overlayControls = document.getElementById("overlay-controls");
+
+	playpause.addEventListener("click", () => {
+		if (video.paused || video.ended) {
+			video.play();
+			playpause.textContent = "||"; // pause
+			updateLyrics();
+		} else {
+			video.pause();
+			playpause.textContent = "||"; // play
+			overlayControls.style.display = "block"; // Show overlay controls when paused
+		}
+	});
+
+	video.addEventListener("play", () => {
+		overlayControls.style.display = "none"; // Hide overlay controls when playing
+	});
+
+
+	// Event listener for the "Timeupdate" event
+	video.addEventListener("timeupdate", () => {
+		seekBar.value = (video.currentTime / video.duration) * 100;
+		updateLyrics();
+		highlightTypedWords();
+		updateMetrics();
+
+		// Show scoreboard if the video is at the end
+		if (video.currentTime >= video.duration - 0.5) {
+			showScoreboard();
+		} else {
+			hideScoreboard();
+		}
+	});
+
+	// Event listener for the "Ended" event
+	video.addEventListener("ended", () => {
+		showScoreboard(); // Show scoreboard when video ends
+		updateScore(); // Update the score one last time at the end of the video
+	});
+
+
+
+	// Event listener for the "End" button
+	const endButton = document.getElementById("endButton");
+	endButton.addEventListener("click", () => {
+		video.currentTime = video.duration; // Go to the end of the video
+		showScoreboard(); // Show scoreboard
+		updateScore(); // Update the score at the end
+	});
+
+	// Function to show the scoreboard
+	function showScoreboard() {
+		scoreboard.style.display = "block"; // Show scoreboard
+	}
+
+
+
+
+
+	const correctLettersDisplay = document.getElementById("correctLetters");
+	const incorrectLettersDisplay = document.getElementById("incorrectLetters");
+	const scoreDisplay = document.getElementById("score");
+
+	</script>
+	</body>
+	</html>
